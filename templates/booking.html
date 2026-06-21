@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - HMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:    #0d1f35;
+            --teal:    #0e7c7b;
+            --teal-lt: #14a39e;
+            --sage:    #4caf82;
+            --cream:   #f8f5f0;
+            --white:   #ffffff;
+            --ink:     #0d1f35;
+            --muted:   #6b7c93;
+            --border:  rgba(14,124,123,0.2);
+            --glass:   rgba(255,255,255,0.78);
+            --shadow:  rgba(13,31,53,0.13);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            background-color: #e4eef5;
+            background-image:
+                radial-gradient(ellipse 70% 55% at 20% 15%, rgba(14,124,123,0.1) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 45% at 85% 85%, rgba(13,31,53,0.07) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.5' fill='%230d1f35' opacity='0.05'/%3E%3C/svg%3E");
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Large decorative cross — purely CSS */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%; left: 5%;
+            transform: translateY(-50%);
+            width: 180px; height: 180px;
+            background:
+                linear-gradient(var(--teal) 0%, var(--teal) 100%) 65px 0 / 50px 180px no-repeat,
+                linear-gradient(var(--teal) 0%, var(--teal) 100%) 0 65px / 180px 50px no-repeat;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 8%; right: 5%;
+            width: 120px; height: 120px;
+            background:
+                linear-gradient(var(--teal) 0%, var(--teal) 100%) 44px 0 / 32px 120px no-repeat,
+                linear-gradient(var(--teal) 0%, var(--teal) 100%) 0 44px / 120px 32px no-repeat;
+            opacity: 0.045;
+            pointer-events: none;
+        }
+
+        /* ── LAYOUT ── */
+        .booking-wrapper {
+            width: 100%;
+            max-width: 920px;
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 0;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(13,31,53,0.2), 0 4px 12px rgba(13,31,53,0.08);
+            animation: appear 0.5s cubic-bezier(.22,.68,0,1.1) both;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(28px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ── LEFT INFO PANEL ── */
+        .info-panel {
+            background: linear-gradient(160deg, #0d1f35 0%, #0e3550 60%, #092538 100%);
+            padding: 50px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 50% at 120% 30%, rgba(14,124,123,0.22) 0%, transparent 60%);
+        }
+
+        .info-grid-bg {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(14,124,123,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14,124,123,0.08) 1px, transparent 1px);
+            background-size: 38px 38px;
+        }
+
+        .info-content { position: relative; z-index: 2; }
+
+        .info-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 48px;
+        }
+
+        .mini-cross {
+            width: 26px; height: 26px;
+            position: relative;
+        }
+        .mini-cross::before, .mini-cross::after {
+            content: '';
+            position: absolute;
+            background: var(--teal-lt);
+            border-radius: 2px;
+        }
+        .mini-cross::before { width: 9px; height: 26px; left: 8.5px; top: 0; }
+        .mini-cross::after  { width: 26px; height: 9px; left: 0; top: 8.5px; }
+
+        .info-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .info-headline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.1rem;
+            font-weight: 600;
+            color: white;
+            line-height: 1.15;
+            margin-bottom: 14px;
+        }
+        .info-headline em { font-style: italic; color: var(--teal-lt); }
+
+        .info-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .info-steps {
+            margin-top: 44px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            padding: 12px 0;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 44px;
+            width: 1px;
+            height: calc(100% - 16px);
+            background: rgba(14,124,123,0.3);
+        }
+
+        .step-num {
+            width: 32px; height: 32px;
+            background: rgba(14,124,123,0.2);
+            border: 1px solid rgba(14,163,158,0.4);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #5de8e6;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-text {
+            padding-top: 6px;
+        }
+        .step-text strong {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 2px;
+        }
+        .step-text span {
+            font-size: 0.76rem;
+            color: rgba(255,255,255,0.36);
+        }
+
+        .info-footer {
+            position: relative;
+            z-index: 2;
+            font-size: 0.73rem;
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* ── RIGHT FORM PANEL ── */
+        .form-panel {
+            background: #f0f7fb;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.5' fill='%230d1f35' opacity='0.04'/%3E%3C/svg%3E");
+            padding: 50px 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            margin-bottom: 32px;
+        }
+
+        .form-kicker {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 8px;
+        }
+
+        .form-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.1;
+            letter-spacing: -0.3px;
+        }
+
+        .divider-line {
+            height: 1px;
+            background: linear-gradient(to right, var(--border), transparent);
+            margin-bottom: 28px;
+        }
+
+        .field-group { margin-bottom: 22px; }
+
+        label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px; height: 16px;
+            color: var(--teal);
+            pointer-events: none;
+            opacity: 0.65;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 13px 14px 13px 40px;
+            border: 1.5px solid rgba(14,124,123,0.22);
+            border-radius: 11px;
+            background: rgba(255,255,255,0.8);
+            color: var(--ink);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 400;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--teal-lt);
+            background: white;
+            box-shadow: 0 0 0 3.5px rgba(14,163,158,0.15);
+        }
+
+        .select-wrap::after {
+            content: '';
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; height: 0;
+            border-left: 4.5px solid transparent;
+            border-right: 4.5px solid transparent;
+            border-top: 5.5px solid var(--teal);
+            pointer-events: none;
+            opacity: 0.65;
+        }
+
+        /* Calendar-style date hint */
+        input[type="date"] {
+            color-scheme: light;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-lt) 100%);
+            color: white;
+            border: none;
+            border-radius: 11px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-top: 8px;
+            letter-spacing: 0.2px;
+            transition: transform 0.18s, box-shadow 0.2s, filter 0.18s;
+            box-shadow: 0 4px 18px rgba(14,124,123,0.35);
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+        }
+        .submit-btn svg { width: 16px; height: 16px; fill: white; }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+            box-shadow: 0 10px 28px rgba(14,124,123,0.42);
+        }
+        .submit-btn:active { transform: translateY(0); }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            display: inline-flex; align-items: center; gap: 5px;
+            transition: color 0.2s;
+        }
+        .back-link a:hover { color: var(--teal); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 740px) {
+            body { align-items: flex-start; }
+            .booking-wrapper { grid-template-columns: 1fr; }
+            .info-panel { padding: 36px 28px 32px; }
+            .info-steps { display: none; }
+            .info-headline { font-size: 1.7rem; }
+            .form-panel { padding: 36px 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-wrapper">
+
+        <!-- INFO PANEL -->
+        <div class="info-panel">
+            <div class="info-grid-bg"></div>
+            <div class="info-content">
+                <div class="info-brand">
+                    <div class="mini-cross"></div>
+                    <span>MediCare HMS</span>
+                </div>
+                <h2 class="info-headline">Schedule<br>your <em>visit</em><br>today.</h2>
+                <p class="info-desc">Book a consultation with one of our experienced specialists. Quick, secure, and confirmed instantly.</p>
+                <div class="info-steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-text">
+                            <strong>Choose a doctor</strong>
+                            <span>Select from our verified specialists</span>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-text">
+                            <strong>Pick your date</strong>
+                            <span>Choose a convenient appointment date</span>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-text">
+                            <strong>Confirm booking</strong>
+                            <span>Your appointment is instantly confirmed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info-footer">Secure &amp; HIPAA-compliant platform</div>
+        </div>
+
+        <!-- FORM PANEL -->
+        <div class="form-panel">
+            <div class="form-header">
+                <div class="form-kicker">New Appointment</div>
+                <h2 class="form-title">Book a Consultation</h2>
+            </div>
+            <div class="divider-line"></div>
+
+            <form action="/book" method="POST">
+
+                <div class="field-group">
+                    <label for="doctor">Select Doctor</label>
+                    <div class="field-wrap select-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+                        <select name="doctor" id="doctor" required>
+                            <option value="" disabled selected>— Choose a Doctor —</option>
+                            {% for doc in doctors %}
+                            <option value="{{ doc.doc_id }}">{{ doc.doctor_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="app_date">Preferred Date</label>
+                    <div class="field-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2zm-2 2H9v2H7V5H4v4h16V5h-3v2h-2V5zm5 6H4v8h16v-8z"/>
+                        </svg>
+                        <input type="date" name="app_date" id="app_date" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    Confirm Booking
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="/">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

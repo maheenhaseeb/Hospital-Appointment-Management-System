@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | HMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:    #0d1f35;
+            --teal:    #0e7c7b;
+            --teal-lt: #14a39e;
+            --sage:    #4caf82;
+            --cream:   #f8f5f0;
+            --white:   #ffffff;
+            --ink:     #0d1f35;
+            --muted:   #6b7c93;
+            --border:  rgba(14,124,123,0.2);
+            --glass:   rgba(255,255,255,0.78);
+            --shadow:  rgba(13,31,53,0.13);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #e4eef5;
+        }
+
+        /* ── LEFT PANEL ── */
+        .panel-left {
+            background: linear-gradient(160deg, #0d1f35 0%, #0e3550 55%, #0a2a3e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 52px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-left::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 110% 20%, rgba(14,124,123,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 40% at -10% 80%, rgba(76,175,130,0.12) 0%, transparent 55%);
+        }
+
+        .panel-left-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(14,124,123,0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14,124,123,0.07) 1px, transparent 1px);
+            background-size: 44px 44px;
+        }
+
+        .panel-left-content { position: relative; z-index: 2; }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 60px;
+        }
+
+        .brand-cross {
+            width: 34px; height: 34px;
+            position: relative;
+        }
+        .brand-cross::before,
+        .brand-cross::after {
+            content: '';
+            position: absolute;
+            background: var(--teal-lt);
+            border-radius: 3px;
+        }
+        .brand-cross::before { width: 12px; height: 34px; left: 11px; top: 0; }
+        .brand-cross::after  { width: 34px; height: 12px; left: 0; top: 11px; }
+
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .panel-headline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 600;
+            color: white;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+        .panel-headline em { font-style: italic; color: var(--teal-lt); }
+
+        .panel-desc {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.48);
+            line-height: 1.75;
+            font-weight: 300;
+            max-width: 340px;
+        }
+
+        .panel-features {
+            margin-top: 44px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.5s ease both;
+        }
+        .feature-item:nth-child(1) { animation-delay: 0.1s; }
+        .feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .feature-item:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .feature-dot {
+            width: 30px; height: 30px;
+            background: rgba(14,124,123,0.2);
+            border: 1px solid rgba(14,163,158,0.3);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .feature-dot svg { width: 14px; height: 14px; fill: #5de8e6; }
+
+        .feature-text {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.58);
+        }
+
+        .panel-footer {
+            position: relative;
+            z-index: 2;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.22);
+        }
+
+        /* ── RIGHT: FORM ── */
+        .panel-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 40px;
+            background-color: #edf4f9;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='0.5' fill='%230d1f35' opacity='0.05'/%3E%3C/svg%3E");
+            overflow-y: auto;
+        }
+
+        .form-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.75);
+            border-radius: 22px;
+            padding: 40px 36px 36px;
+            box-shadow: 0 8px 40px var(--shadow), 0 1px 0 rgba(255,255,255,0.9) inset;
+            animation: slideUp 0.5s cubic-bezier(.22,.68,0,1.1) both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .form-sub {
+            font-size: 0.84rem;
+            color: var(--muted);
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+
+        .divider-line {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border), transparent);
+            margin-bottom: 26px;
+        }
+
+        .group { margin-bottom: 16px; }
+
+        label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 7px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px; height: 15px;
+            color: var(--teal);
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 14px 11px 38px;
+            border: 1.5px solid rgba(14,124,123,0.2);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.65);
+            color: var(--ink);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        input::placeholder { color: rgba(107,124,147,0.55); }
+
+        input:focus, select:focus {
+            border-color: var(--teal-lt);
+            background: white;
+            box-shadow: 0 0 0 3.5px rgba(14,163,158,0.15);
+        }
+
+        .select-wrap::after {
+            content: '';
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; height: 0;
+            border-left: 4.5px solid transparent;
+            border-right: 4.5px solid transparent;
+            border-top: 5.5px solid var(--teal);
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        #spec_field {
+            display: none;
+            margin-top: 12px;
+            background: rgba(14,124,123,0.05);
+            border: 1.5px solid rgba(14,124,123,0.15);
+            border-radius: 10px;
+            padding: 14px;
+        }
+        #spec_field label { margin-bottom: 7px; }
+        #spec_field input { background: rgba(255,255,255,0.8); }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--teal) 0%, var(--teal-lt) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 8px;
+            transition: transform 0.18s, box-shadow 0.2s, filter 0.18s;
+            box-shadow: 0 4px 18px rgba(14,124,123,0.35);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn svg { width: 16px; height: 16px; fill: white; }
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+            box-shadow: 0 8px 24px rgba(14,124,123,0.42);
+        }
+        .btn:active { transform: translateY(0); }
+
+        .back-link {
+            text-align: center;
+            margin-top: 18px;
+        }
+        .back-link a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            display: inline-flex; align-items: center; gap: 5px;
+            transition: color 0.2s;
+        }
+        .back-link a:hover { color: var(--teal); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 860px) {
+            body { grid-template-columns: 1fr; }
+            .panel-left { display: none; }
+            .panel-right { padding: 36px 20px; min-height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LEFT PANEL -->
+    <div class="panel-left">
+        <div class="panel-left-grid"></div>
+        <div class="panel-left-content">
+            <div class="brand">
+                <div class="brand-cross"></div>
+                <span class="brand-name">MediCare HMS</span>
+            </div>
+            <h2 class="panel-headline">Join our<br><em>healthcare</em><br>network.</h2>
+            <p class="panel-desc">Create your account to access appointments, manage your medical history, and connect with specialists.</p>
+            <div class="panel-features">
+                <div class="feature-item">
+                    <div class="feature-dot">
+                        <svg viewBox="0 0 24 24"><path d="M17 3h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2v2h6V1h2v2z"/></svg>
+                    </div>
+                    <span class="feature-text">Instant appointment scheduling</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/></svg>
+                    </div>
+                    <span class="feature-text">Secure medical records access</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot">
+                        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 17.93V18h-2v1.93A8.001 8.001 0 0 1 4.07 13H6v-2H4.07A8.001 8.001 0 0 1 11 4.07V6h2V4.07A8.001 8.001 0 0 1 19.93 11H18v2h1.93A8.001 8.001 0 0 1 13 19.93z"/></svg>
+                    </div>
+                    <span class="feature-text">Real-time billing & payment tracking</span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">© 2025 MediCare Hospital Management System</div>
+    </div>
+
+    <!-- RIGHT: FORM -->
+    <div class="panel-right">
+        <div class="form-card">
+            <h2 class="form-title">Create Account</h2>
+            <p class="form-sub">Fill in your details to get started.</p>
+            <div class="divider-line"></div>
+
+            <form action="/register" method="POST">
+
+                <div class="group">
+                    <label>Full Name</label>
+                    <div class="field-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                        <input type="text" name="name" placeholder="Your full name" required>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label>Email</label>
+                    <div class="field-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <input type="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label>Password</label>
+                    <div class="field-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6A5 5 0 0 0 7 6v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3.1-9H8.9V6a3.1 3.1 0 0 1 6.2 0v2z"/></svg>
+                        <input type="password" name="password" placeholder="Create a password" required>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label>Contact</label>
+                    <div class="field-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+                        <input type="text" name="contact" placeholder="Phone number" required>
+                    </div>
+                </div>
+
+                <div class="group">
+                    <label>Account Type</label>
+                    <div class="field-wrap select-wrap">
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                        <select name="role" id="roleSelect" onchange="toggleSpec()">
+                            <option value="patient">Patient</option>
+                            <option value="doctor">Doctor</option>
+                            <option value="admin">Admin (Staff Only)</option>
+                        </select>
+                    </div>
+
+                    <div id="spec_field">
+                        <label>Doctor Specialization</label>
+                        <div class="field-wrap">
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm6 13H6v-.9C6 16 9 14.9 12 14.9s6 1.1 6 2.2V19z"/></svg>
+                            <input type="text" name="specialization" placeholder="e.g. Cardiologist">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    Create Account
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="/">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    Back to Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSpec() {
+            var role = document.getElementById('roleSelect').value;
+            document.getElementById('spec_field').style.display = (role === 'doctor') ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
